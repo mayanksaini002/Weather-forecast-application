@@ -9,6 +9,28 @@ const forecastList = document.getElementById('forecastList');
 const weatherIcon = document.getElementById('weatherIcon');
 const errorContainer = document.getElementById('errorContainer');
 
+// Map weather condition codes to Font Awesome classes
+const iconMap = {
+    '01d': '<i class="fas fa-sun text-yellow-400 text-6xl"></i>', // Clear sky (day)
+    '01n': '<i class="fas fa-moon text-blue-400 text-6xl"></i>', // Clear sky (night)
+    '02d': '<i class="fas fa-cloud-sun text-yellow-400 text-6xl"></i>', // Few clouds (day)
+    '02n': '<i class="fas fa-cloud-moon text-blue-400 text-6xl"></i>', // Few clouds (night)
+    '03d': '<i class="fas fa-cloud text-gray-400 text-6xl"></i>', // Scattered clouds
+    '03n': '<i class="fas fa-cloud text-gray-400 text-6xl"></i>', // Scattered clouds
+    '04d': '<i class="fas fa-cloud text-gray-500 text-6xl"></i>', // Broken clouds
+    '04n': '<i class="fas fa-cloud text-gray-500 text-6xl"></i>', // Broken clouds
+    '09d': '<i class="fas fa-cloud-showers-heavy text-blue-500 text-6xl"></i>', // Shower rain
+    '09n': '<i class="fas fa-cloud-showers-heavy text-blue-500 text-6xl"></i>', // Shower rain
+    '10d': '<i class="fas fa-cloud-rain text-blue-400 text-6xl"></i>', // Rain (day)
+    '10n': '<i class="fas fa-cloud-rain text-blue-400 text-6xl"></i>', // Rain (night)
+    '11d': '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>', // Thunderstorm
+    '11n': '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>', // Thunderstorm
+    '13d': '<i class="fas fa-snowflake text-blue-300 text-6xl"></i>', // Snow
+    '13n': '<i class="fas fa-snowflake text-blue-300 text-6xl"></i>', // Snow
+    '50d': '<i class="fas fa-smog text-gray-400 text-6xl"></i>', // Mist
+    '50n': '<i class="fas fa-smog text-gray-400 text-6xl"></i>', // Mist
+};
+
 getWeatherButton.addEventListener('click', async () => {
     const location = locationInput.value.trim();
     if (!location) {
@@ -67,18 +89,21 @@ function displayWeather(data) {
         <p id="humidity">Humidity: ${main.humidity}%</p>
         <p id="windSpeed">Wind Speed: ${wind.speed} m/s</p>
     `;
-    
-    // Set the weather icon
-    weatherIcon.src = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
-    weatherIcon.alt = weather[0].description;
+
+    // Set the weather icon using Font Awesome
+    // Set the weather icon using Font Awesome
+const iconCode = weather[0].icon;
+weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
+
 
     // Display the 5-day forecast
     forecastList.innerHTML = forecast.map(day => {
         const date = new Date(day.dt * 1000);
+        const forecastIconCode = day.weather[0].icon;
         return `
             <li class="bg-white p-6 rounded-lg shadow-lg text-center">
                 <p class="text-lg font-semibold">${date.toLocaleDateString()}</p>
-                <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="${day.weather[0].description}" class="w-16 h-16 mx-auto" />
+                <div class="text-center">${iconMap[forecastIconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>'}</div>
                 <p>${day.weather[0].description}</p>
                 <p>Temp: ${day.main.temp}°C</p>
             </li>

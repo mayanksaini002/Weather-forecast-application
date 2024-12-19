@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-cover bg-fixed " style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg');">
+<body class="bg-cover bg-fixed" style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg'); font-family: 'Arial', sans-serif;">
 
-    <!-- Fixed Navbar with Black Gradient Background and Height of 90px -->
+    <!-- Fixed Navbar -->
     <nav class="fixed top-0 left-0 w-full opacity-80 bg-gradient-to-r from-black to-gray-800 h-[90px] shadow-md z-50 flex items-center justify-center">
-        <h1 class="text-3xl text-white font-extrabold opacity-120">Weather Forecast</h1>
+        <h1 class="text-3xl text-white font-extrabold">Weather Forecast</h1>
     </nav>
 
-    <!-- Input Container with a 2px gap from the bottom of the navbar -->
+    <!-- Input Container -->
     <div class="container mx-auto mt-[100px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
         <div class="flex flex-col items-center justify-center gap-4">
             <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
@@ -21,26 +22,27 @@
         </div>
     </div>
 
-    <!-- Weather Data Container with Background Image -->
-    <div id="weatherContainer" class="hidden mt-6 max-w-6xl mx-auto p-6 bg-white bg-opacity-70 rounded-lg shadow-xl">
-        <div class="bg-black bg-opacity-0 p-4 rounded-lg"> <!-- Overlay for readability -->
-            <h2 id="locationHeading" class="text-3xl font-semibold text-center mb-4 text-white"></h2>
-            
-            <!-- Current Weather -->
-            <div class="flex justify-center gap-6 items-center text-white">
-                <img id="weatherIcon" class="w-24 h-24" />
-                <div id="weatherProperties" class="text-center text-xl">
-                    <p id="temperature" class="font-medium"></p>
-                    <p id="humidity" class="font-medium"></p>
-                    <p id="windSpeed" class="font-medium"></p>
+    <!-- Weather Data Container -->
+    <div id="weatherContainer" class="hidden mt-6 max-w-6xl mx-auto p-8 bg-white bg-opacity-70 rounded-lg shadow-xl">
+        <div class="flex flex-col lg:flex-row items-start gap-6" style="opacity: 1;"> <!-- Ensuring full opacity -->
+            <!-- Left-aligned Weather Details -->
+            <div class="flex flex-col gap-4">
+                <h2 id="locationHeading" class="text-4xl font-bold text-black">Location Name</h2>
+                <div class="flex items-center gap-6">
+                    <div id="weatherIcon" class="text-center w-32 h-32"></div>
+                    <div id="weatherProperties" class="text-xl">
+                        <p id="temperature" class="font-semibold text-yellow-300">Temperature: 25°C</p>
+                        <p id="humidity" class="font-semibold text-yellow-300">Humidity: 60%</p>
+                        <p id="windSpeed" class="font-semibold text-yellow-300">Wind Speed: 5 m/s</p>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 5-Day Forecast Section -->
-            <div id="forecastContainer" class="mt-8">
-                <h3 class="text-2xl font-semibold text-center text-white">5-Day Forecast</h3>
-                <ul id="forecastList" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></ul>
-            </div>
+        <!-- 5-Day Forecast Section -->
+        <div id="forecastContainer" class="mt-12">
+            <h3 class="text-3xl font-bold text-center text-white">5-Day Forecast</h3>
+            <ul id="forecastList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></ul>
         </div>
     </div>
 
