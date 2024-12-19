@@ -6,29 +6,46 @@
     <title>Weather Forecast Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-cover bg-fixed " style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg');">
 
-    <div class="container mx-auto p-6">
-        <h1 class="text-center text-3xl font-semibold">Weather Forecast</h1>
+    <!-- Fixed Navbar with Black Gradient Background and Height of 90px -->
+    <nav class="fixed top-0 left-0 w-full opacity-80 bg-gradient-to-r from-black to-gray-800 h-[90px] shadow-md z-50 flex items-center justify-center">
+        <h1 class="text-3xl text-white font-extrabold opacity-120">Weather Forecast</h1>
+    </nav>
 
-        <div class="mt-6">
-            <input type="text" id="locationInput" class="p-2 w-full rounded-lg" placeholder="Enter city name">
-            <button id="getWeatherButton" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded-lg w-full">Get Weather info</button>
+    <!-- Input Container with a 2px gap from the bottom of the navbar -->
+    <div class="container mx-auto mt-[100px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
+        <div class="flex flex-col items-center justify-center gap-4">
+            <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
+            <button id="getWeatherButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition">Get Weather</button>
         </div>
+    </div>
 
-        <div id="weatherContainer" class="hidden mt-6">
-            <h2 id="locationHeading" class="text-2xl font-bold text-center"></h2>
-            <div id="weatherProperties" class="text-center mt-4"></div>
-            <img id="weatherIcon" class="mx-auto mt-4" />
+    <!-- Weather Data Container with Background Image -->
+    <div id="weatherContainer" class="hidden mt-6 max-w-6xl mx-auto p-6 bg-white bg-opacity-70 rounded-lg shadow-xl">
+        <div class="bg-black bg-opacity-0 p-4 rounded-lg"> <!-- Overlay for readability -->
+            <h2 id="locationHeading" class="text-3xl font-semibold text-center mb-4 text-white"></h2>
             
-            <div id="forecastContainer" class="mt-6">
-                <h3 class="text-xl font-semibold text-center">5-Day Forecast</h3>
-                <ul id="forecastList" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></ul>
+            <!-- Current Weather -->
+            <div class="flex justify-center gap-6 items-center text-white">
+                <img id="weatherIcon" class="w-24 h-24" />
+                <div id="weatherProperties" class="text-center text-xl">
+                    <p id="temperature" class="font-medium"></p>
+                    <p id="humidity" class="font-medium"></p>
+                    <p id="windSpeed" class="font-medium"></p>
+                </div>
+            </div>
+
+            <!-- 5-Day Forecast Section -->
+            <div id="forecastContainer" class="mt-8">
+                <h3 class="text-2xl font-semibold text-center text-white">5-Day Forecast</h3>
+                <ul id="forecastList" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></ul>
             </div>
         </div>
-
-        <div id="errorContainer" class="text-center text-red-500 mt-6 hidden"></div>
     </div>
+
+    <!-- Error Container -->
+    <div id="errorContainer" class="text-center text-red-500 mt-6 hidden"></div>
 
     <script src="index.js"></script>
 </body>

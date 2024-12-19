@@ -63,9 +63,9 @@ function displayWeather(data) {
     const { name, sys, weather, main, wind, forecast } = data;
     locationHeading.textContent = `${name}, ${sys.country}`;
     weatherProperties.innerHTML = `
-        <p class="text-lg font-medium">Temperature: ${main.temp}°C</p>
-        <p class="text-lg font-medium">Humidity: ${main.humidity}%</p>
-        <p class="text-lg font-medium">Wind Speed: ${wind.speed} m/s</p>
+        <p id="temperature">Temperature: ${main.temp}°C</p>
+        <p id="humidity">Humidity: ${main.humidity}%</p>
+        <p id="windSpeed">Wind Speed: ${wind.speed} m/s</p>
     `;
     
     // Set the weather icon
@@ -76,9 +76,9 @@ function displayWeather(data) {
     forecastList.innerHTML = forecast.map(day => {
         const date = new Date(day.dt * 1000);
         return `
-            <li class="bg-blue-100 p-4 rounded-lg shadow-md">
+            <li class="bg-white p-6 rounded-lg shadow-lg text-center">
                 <p class="text-lg font-semibold">${date.toLocaleDateString()}</p>
-                <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="${day.weather[0].description}" class="w-12 h-12" />
+                <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="${day.weather[0].description}" class="w-16 h-16 mx-auto" />
                 <p>${day.weather[0].description}</p>
                 <p>Temp: ${day.main.temp}°C</p>
             </li>
@@ -93,4 +93,3 @@ function displayError(message) {
     errorContainer.classList.remove('hidden');
     weatherContainer.classList.add('hidden');
 }
-
