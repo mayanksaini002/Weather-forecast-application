@@ -8,6 +8,7 @@ const weatherProperties = document.getElementById('weatherProperties');
 const forecastList = document.getElementById('forecastList');
 const weatherIcon = document.getElementById('weatherIcon');
 const errorContainer = document.getElementById('errorContainer');
+const getCurrentLocationButton = document.getElementById('getCurrentLocationButton');
 
 // Map weather condition codes to Font Awesome classes
 const iconMap = {
@@ -45,6 +46,33 @@ getWeatherButton.addEventListener('click', async () => {
         displayError(error.message);
     }
 });
+
+getCurrentLocationButton.addEventListener('click', async () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+                // Set the input field with the current location
+                const currentLocation = await getLocationByCoordinates(latitude, longitude);
+                locationInput.value = currentLocation;
+
+                // Now, wait for the user to click "Get Weather"
+            } catch (error) {
+                displayError('Unable to retrieve your location.');
+            }
+        });
+    } else {
+        displayError('Geolocation is not supported by this browser.');
+    }
+});
+
+async function getLocationByCoordinates(lat, lon) {
+    const response = await fetch(
+        `${baseApiUrl}weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    );
+    const data = await response.json();
+    return data.name;
+}
 
 async function fetchWeather(location) {
     const controller = new AbortController();
@@ -91,10 +119,8 @@ function displayWeather(data) {
     `;
 
     // Set the weather icon using Font Awesome
-    // Set the weather icon using Font Awesome
-const iconCode = weather[0].icon;
-weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
-
+    const iconCode = weather[0].icon;
+    weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
 
     // Display the 5-day forecast
     forecastList.innerHTML = forecast.map(day => {

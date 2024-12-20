@@ -6,6 +6,14 @@
     <title>Weather Forecast Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .input-container {
+            margin-bottom: 16px;
+        }
+        .button-container {
+            margin-top: 12px;
+        }
+    </style>
 </head>
 <body class="bg-cover bg-fixed" style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg'); font-family: 'Arial', sans-serif;">
 
@@ -15,25 +23,36 @@
     </nav>
 
     <!-- Input Container -->
-    <div class="container mx-auto mt-[100px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
-        <div class="flex flex-col items-center justify-center gap-4">
-            <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
-            <button id="getWeatherButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition">Get Weather</button>
+    <div class="container mx-auto mt-[135px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
+        <div class="flex flex-col items-center justify-center gap-6">
+            <!-- Location Input -->
+            <div class="input-container w-full">
+                <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-container text-center w-full">
+                <p>OR</p>
+                <button id="getCurrentLocationButton" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition mt-4">Use Current Location</button>
+            </div>
+
+            <div class="button-container text-center w-full mt-4">
+                <button id="getWeatherButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition">Get Weather</button>
+            </div>
         </div>
     </div>
 
     <!-- Weather Data Container -->
-    <div id="weatherContainer" class="hidden mt-6 max-w-6xl mx-auto p-8 bg-white bg-opacity-70 rounded-lg shadow-xl">
-        <div class="flex flex-col lg:flex-row items-start gap-6" style="opacity: 1;"> <!-- Ensuring full opacity -->
-            <!-- Left-aligned Weather Details -->
-            <div class="flex flex-col gap-4">
-                <h2 id="locationHeading" class="text-4xl font-bold text-black">Location Name</h2>
-                <div class="flex items-center gap-6">
-                    <div id="weatherIcon" class="text-center w-32 h-32"></div>
+    <div id="weatherContainer" class="hidden mt-12 max-w-6xl mx-auto p-8 bg-white bg-opacity-70 rounded-lg shadow-xl">
+        <div class="flex flex-col lg:flex-row items-start gap-6">
+            <div class="flex flex-col gap-8">
+                <h2 id="locationHeading" class="text-5xl font-bold text-black font-sans" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">Location Name</h2>
+                <div class="flex items-center gap-6 ">
+                    <div id="weatherIcon" class="text-center w-90px h-90px mt-0px"></div>
                     <div id="weatherProperties" class="text-xl">
-                        <p id="temperature" class="font-semibold text-yellow-300">Temperature: 25°C</p>
-                        <p id="humidity" class="font-semibold text-yellow-300">Humidity: 60%</p>
-                        <p id="windSpeed" class="font-semibold text-yellow-300">Wind Speed: 5 m/s</p>
+                        <p id="temperature" class="font-semibold font-sanstext-yellow-300">Temperature</p>
+                        <p id="humidity" class="font-semibold font-sanstext-yellow-300">Humidity</p>
+                        <p id="windSpeed" class="font-semibold font-sans text-yellow-300">Wind Speed</p>
                     </div>
                 </div>
             </div>
