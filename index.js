@@ -52,11 +52,8 @@ getCurrentLocationButton.addEventListener('click', async () => {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const { latitude, longitude } = position.coords;
             try {
-                // Set the input field with the current location
                 const currentLocation = await getLocationByCoordinates(latitude, longitude);
                 locationInput.value = currentLocation;
-
-                // Now, wait for the user to click "Get Weather"
             } catch (error) {
                 displayError('Unable to retrieve your location.');
             }
@@ -113,25 +110,23 @@ function displayWeather(data) {
     const { name, sys, weather, main, wind, forecast } = data;
     locationHeading.textContent = `${name}, ${sys.country}`;
     weatherProperties.innerHTML = `
-        <p id="temperature">Temperature: ${main.temp}°C</p>
         <p id="humidity">Humidity: ${main.humidity}%</p>
         <p id="windSpeed">Wind Speed: ${wind.speed} m/s</p>
+        <p id="temperature">Temperature: ${main.temp}°C</p>
     `;
 
-    // Set the weather icon using Font Awesome
     const iconCode = weather[0].icon;
     weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
 
-    // Display the 5-day forecast
     forecastList.innerHTML = forecast.map(day => {
         const date = new Date(day.dt * 1000);
         const forecastIconCode = day.weather[0].icon;
         return `
-            <li class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <li class="bg-white p-10 pt-5 rounded-lg shadow-lg text-center h-[300px]">
                 <p class="text-lg font-semibold">${date.toLocaleDateString()}</p>
-                <div class="text-center">${iconMap[forecastIconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>'}</div>
-                <p>${day.weather[0].description}</p>
-                <p>Temp: ${day.main.temp}°C</p>
+                <div class="mt-4 text-center">${iconMap[forecastIconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>'}</div>
+                <p class="mt-6 text-xl font-serif font-bold text-gray-800" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);">${day.weather[0].description}</p>
+                <p class="text-lg mt-5">Temp: ${day.main.temp}°C</p>
             </li>
         `;
     }).join('');

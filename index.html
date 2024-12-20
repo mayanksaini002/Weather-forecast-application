@@ -26,14 +26,14 @@
     <div class="container mx-auto mt-[135px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
         <div class="flex flex-col items-center justify-center gap-6">
             <!-- Location Input -->
-            <div class="input-container w-full">
+            <div class="input-container w-full mb-0">
                 <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
             </div>
 
             <!-- Buttons -->
-            <div class="button-container text-center w-full">
+            <div class="button-container text-center w-full mt-0">
                 <p>OR</p>
-                <button id="getCurrentLocationButton" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition mt-4">Use Current Location</button>
+                <button id="getCurrentLocationButton" class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition mt-4">Use Current Location</button>
             </div>
 
             <div class="button-container text-center w-full mt-4">
@@ -43,16 +43,16 @@
     </div>
 
     <!-- Weather Data Container -->
-    <div id="weatherContainer" class="hidden mt-12 max-w-6xl mx-auto p-8 bg-white bg-opacity-70 rounded-lg shadow-xl">
+    <div id="weatherContainer" class="hidden mt-12 mb-12 max-w-6xl mx-auto p-8 bg-white bg-opacity-80 rounded-lg shadow-xl">
         <div class="flex flex-col lg:flex-row items-start gap-6">
             <div class="flex flex-col gap-8">
                 <h2 id="locationHeading" class="text-5xl font-bold text-black font-sans" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">Location Name</h2>
-                <div class="flex items-center gap-6 ">
+                <div class="flex items-center gap-6">
                     <div id="weatherIcon" class="text-center w-90px h-90px mt-0px"></div>
                     <div id="weatherProperties" class="text-xl">
-                        <p id="temperature" class="font-semibold font-sanstext-yellow-300">Temperature</p>
-                        <p id="humidity" class="font-semibold font-sanstext-yellow-300">Humidity</p>
+                        <p id="humidity" class="font-semibold font-sans text-yellow-300">Humidity</p>
                         <p id="windSpeed" class="font-semibold font-sans text-yellow-300">Wind Speed</p>
+                        <p id="temperature" class="font-semibold font-sans text-yellow-300">Temperature</p>
                     </div>
                 </div>
             </div>
@@ -60,8 +60,13 @@
 
         <!-- 5-Day Forecast Section -->
         <div id="forecastContainer" class="mt-12">
-            <h3 class="text-3xl font-bold text-center text-white">5-Day Forecast</h3>
-            <ul id="forecastList" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></ul>
+            <h3 class="text-4xl text-gray-700 font-sans font-bold text-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
+                5-Day Forecast
+            </h3>
+            
+            <ul id="forecastList" class="mt-6 grid gap-8 justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+            </ul>
+            
         </div>
     </div>
 
