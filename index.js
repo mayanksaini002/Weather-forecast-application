@@ -118,12 +118,15 @@ function displayWeather(data) {
     const iconCode = weather[0].icon;
     weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
 
-    forecastList.innerHTML = forecast.map(day => {
-        const date = new Date(day.dt * 1000);
+    forecastList.innerHTML = forecast.map((day, index) => {
+        const forecastDate = new Date();
+        forecastDate.setDate(forecastDate.getDate() + index + 1); // Calculate date for next days
+        const formattedDate = forecastDate.toLocaleDateString(); // Format the date
+
         const forecastIconCode = day.weather[0].icon;
         return `
             <li class="bg-white p-10 pt-5 rounded-lg shadow-lg text-center h-[300px]">
-                <p class="text-lg font-semibold">${date.toLocaleDateString()}</p>
+                <p class="text-lg font-semibold">${formattedDate}</p>
                 <div class="mt-4 text-center">${iconMap[forecastIconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>'}</div>
                 <p class="mt-6 text-xl font-serif font-bold text-gray-800" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);">${day.weather[0].description}</p>
                 <p class="text-lg mt-5">Temp: ${day.main.temp}°C</p>
