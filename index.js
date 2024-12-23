@@ -9,29 +9,53 @@ const forecastList = document.getElementById('forecastList');
 const weatherIcon = document.getElementById('weatherIcon');
 const errorContainer = document.getElementById('errorContainer');
 const getCurrentLocationButton = document.getElementById('getCurrentLocationButton');
+const weatherHistoryButton = document.getElementById('weatherHistoryButton');
+const historyDropdown = document.getElementById('historyDropdown');
+const historyList = document.getElementById('historyList');
+const noHistory = document.getElementById('noHistory');
 
-// Map weather condition codes to Font Awesome classes
+// Icon map for weather icons
 const iconMap = {
-    '01d': '<i class="fas fa-sun text-yellow-400 text-6xl"></i>', // Clear sky (day)
-    '01n': '<i class="fas fa-moon text-blue-400 text-6xl"></i>', // Clear sky (night)
-    '02d': '<i class="fas fa-cloud-sun text-yellow-400 text-6xl"></i>', // Few clouds (day)
-    '02n': '<i class="fas fa-cloud-moon text-blue-400 text-6xl"></i>', // Few clouds (night)
-    '03d': '<i class="fas fa-cloud text-gray-400 text-6xl"></i>', // Scattered clouds
-    '03n': '<i class="fas fa-cloud text-gray-400 text-6xl"></i>', // Scattered clouds
-    '04d': '<i class="fas fa-cloud text-gray-500 text-6xl"></i>', // Broken clouds
-    '04n': '<i class="fas fa-cloud text-gray-500 text-6xl"></i>', // Broken clouds
-    '09d': '<i class="fas fa-cloud-showers-heavy text-blue-500 text-6xl"></i>', // Shower rain
-    '09n': '<i class="fas fa-cloud-showers-heavy text-blue-500 text-6xl"></i>', // Shower rain
-    '10d': '<i class="fas fa-cloud-rain text-blue-400 text-6xl"></i>', // Rain (day)
-    '10n': '<i class="fas fa-cloud-rain text-blue-400 text-6xl"></i>', // Rain (night)
-    '11d': '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>', // Thunderstorm
-    '11n': '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>', // Thunderstorm
-    '13d': '<i class="fas fa-snowflake text-blue-300 text-6xl"></i>', // Snow
-    '13n': '<i class="fas fa-snowflake text-blue-300 text-6xl"></i>', // Snow
-    '50d': '<i class="fas fa-smog text-gray-400 text-6xl"></i>', // Mist
-    '50n': '<i class="fas fa-smog text-gray-400 text-6xl"></i>', // Mist
+    "01d": '<i class="fas fa-sun text-yellow-500 text-6xl"></i>',
+    "01n": '<i class="fas fa-moon text-yellow-500 text-6xl"></i>',
+    "02d": '<i class="fas fa-cloud-sun text-yellow-500 text-6xl"></i>',
+    "02n": '<i class="fas fa-cloud-moon text-yellow-500 text-6xl"></i>',
+    "03d": '<i class="fas fa-cloud text-gray-500 text-6xl"></i>',
+    "03n": '<i class="fas fa-cloud text-gray-500 text-6xl"></i>',
+    "04d": '<i class="fas fa-cloud-showers-heavy text-gray-500 text-6xl"></i>',
+    "04n": '<i class="fas fa-cloud-showers-heavy text-gray-500 text-6xl"></i>',
+    "09d": '<i class="fas fa-cloud-rain text-blue-500 text-6xl"></i>',
+    "09n": '<i class="fas fa-cloud-rain text-blue-500 text-6xl"></i>',
+    "10d": '<i class="fas fa-cloud-sun-rain text-blue-500 text-6xl"></i>',
+    "10n": '<i class="fas fa-cloud-moon-rain text-blue-500 text-6xl"></i>',
+    "11d": '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>',
+    "11n": '<i class="fas fa-bolt text-yellow-500 text-6xl"></i>',
+    "13d": '<i class="fas fa-snowflake text-white text-6xl"></i>',
+    "13n": '<i class="fas fa-snowflake text-white text-6xl"></i>',
+    "50d": '<i class="fas fa-smog text-gray-500 text-6xl"></i>',
+    "50n": '<i class="fas fa-smog text-gray-500 text-6xl"></i>'
 };
 
+let weatherHistory = JSON.parse(sessionStorage.getItem('weatherHistory')) || [];
+
+// Toggle the Weather History dropdown visibility
+weatherHistoryButton.addEventListener('click', () => {
+    historyDropdown.classList.toggle('hidden');
+    if (weatherHistory.length === 0) {
+        noHistory.classList.remove('hidden');
+        historyList.classList.add('hidden');
+    } else {
+        noHistory.classList.add('hidden');
+        historyList.classList.remove('hidden');
+        historyList.innerHTML = weatherHistory.map(entry => {
+            return `<li class="py-2 px-4 border-b border-gray-300 text-sm">
+                <strong>${entry.location}</strong>: ${entry.temperature}°C
+            </li>`;
+        }).join('');
+    }
+});
+
+// Handle Weather Fetch from Search Box
 getWeatherButton.addEventListener('click', async () => {
     const location = locationInput.value.trim();
     if (!location) {
@@ -42,11 +66,13 @@ getWeatherButton.addEventListener('click', async () => {
     try {
         const weatherData = await fetchWeather(location);
         displayWeather(weatherData);
+        addToHistory(location, weatherData.main.temp);
     } catch (error) {
         displayError(error.message);
     }
 });
 
+// Handle Current Location Button
 getCurrentLocationButton.addEventListener('click', async () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
@@ -63,14 +89,7 @@ getCurrentLocationButton.addEventListener('click', async () => {
     }
 });
 
-async function getLocationByCoordinates(lat, lon) {
-    const response = await fetch(
-        `${baseApiUrl}weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    );
-    const data = await response.json();
-    return data.name;
-}
-
+// Fetch Weather Data
 async function fetchWeather(location) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
@@ -98,14 +117,16 @@ async function fetchWeather(location) {
     }
 }
 
+// Fetch Forecast Data
 async function fetchForecast(lat, lon) {
     const response = await fetch(
         `${baseApiUrl}forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     );
     const data = await response.json();
-    return data.list.slice(0, 5); // Get next 5 days of forecast
+    return data.list.slice(0, 5); // Get next 5 forecasts
 }
 
+// Display Weather Data
 function displayWeather(data) {
     const { name, sys, weather, main, wind, forecast } = data;
     locationHeading.textContent = `${name}, ${sys.country}`;
@@ -119,16 +140,15 @@ function displayWeather(data) {
     weatherIcon.innerHTML = iconMap[iconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>';
 
     forecastList.innerHTML = forecast.map((day, index) => {
-        const forecastDate = new Date();
-        forecastDate.setDate(forecastDate.getDate() + index + 1); // Calculate date for next days
-        const formattedDate = forecastDate.toLocaleDateString(); // Format the date
-
+        const date = new Date();
+        date.setDate(date.getDate() + index + 1); // Get dates for the next 5 days
         const forecastIconCode = day.weather[0].icon;
+
         return `
-            <li class="bg-white p-10 pt-5 rounded-lg shadow-lg text-center h-[300px]">
-                <p class="text-lg font-semibold">${formattedDate}</p>
+            <li class="bg-gray-900 p-6 pt-4 rounded-lg shadow-lg text-center text-white h-[300px] w-[200px] border border-gray-700 flex flex-col justify-between transform transition-transform duration-300 hover:scale-110 hover:shadow-2xl">
+                <p class="text-lg font-semibold text-gray-300">${date.toLocaleDateString()}</p>
                 <div class="mt-4 text-center">${iconMap[forecastIconCode] || '<i class="fas fa-question-circle text-red-500 text-6xl"></i>'}</div>
-                <p class="mt-6 text-xl font-serif font-bold text-gray-800" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);">${day.weather[0].description}</p>
+                <p class="mt-6 text-xl font-serif font-bold text-yellow-200 card-description">${day.weather[0].description}</p>
                 <p class="text-lg mt-5">Temp: ${day.main.temp}°C</p>
             </li>
         `;
@@ -137,8 +157,19 @@ function displayWeather(data) {
     weatherContainer.classList.remove('hidden');
 }
 
+// Handle Error
 function displayError(message) {
     errorContainer.textContent = message;
     errorContainer.classList.remove('hidden');
     weatherContainer.classList.add('hidden');
+}
+
+// Add Search to History
+function addToHistory(location, temperature) {
+    weatherHistory.unshift({ location, temperature });
+    if (weatherHistory.length > 4) {
+        weatherHistory.pop();
+    }
+
+    sessionStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
 }
