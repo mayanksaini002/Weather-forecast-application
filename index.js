@@ -14,6 +14,7 @@ const historyDropdown = document.getElementById('historyDropdown');
 const historyList = document.getElementById('historyList');
 const noHistory = document.getElementById('noHistory');
 
+
 // Icon map for weather icons
 const iconMap = {
     "01d": '<i class="fas fa-sun text-yellow-500 text-6xl"></i>',
