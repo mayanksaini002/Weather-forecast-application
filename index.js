@@ -1,3 +1,4 @@
+//Calling all the required elements 
 const apiKey = '9428b90de634547456b50e5f9d3cecfd';
 const baseApiUrl = 'https://api.openweathermap.org/data/2.5/';
 const getWeatherButton = document.getElementById('getWeatherButton');
