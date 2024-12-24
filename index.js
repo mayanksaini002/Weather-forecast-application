@@ -47,11 +47,31 @@ weatherHistoryButton.addEventListener('click', () => {
     } else {
         noHistory.classList.add('hidden');
         historyList.classList.remove('hidden');
-        historyList.innerHTML = weatherHistory.map(entry => {
-            return `<li class="py-2 px-4 border-b border-gray-300 text-sm">
-                <strong>${entry.location}</strong>: ${entry.temperature}°C
-            </li>`;
-        }).join('');
+        renderHistoryList();
+    }
+});
+
+// Render History List
+function renderHistoryList() {
+    historyList.innerHTML = weatherHistory.map((entry, index) => {
+        return `<li data-index="${index}" class="cursor-pointer py-2 px-4 border-b border-gray-300 text-sm hover:bg-gray-100">
+            <strong>${entry.location}</strong>: ${entry.temperature}°C
+        </li>`;
+    }).join('');
+}
+
+// Add Click Event to History List Items
+historyList.addEventListener('click', (event) => {
+    const target = event.target.closest('li[data-index]');
+    if (target) {
+        const index = target.getAttribute('data-index');
+        const selectedLocation = weatherHistory[index].location;
+
+        // Update input box with selected location
+        locationInput.value = selectedLocation;
+
+        // Fetch and display weather details for the selected location
+        getWeatherButton.click();
     }
 });
 
@@ -67,6 +87,9 @@ getWeatherButton.addEventListener('click', async () => {
         const weatherData = await fetchWeather(location);
         displayWeather(weatherData);
         addToHistory(location, weatherData.main.temp);
+
+        // Make history dropdown visible after first search
+        weatherHistoryButton.classList.remove('hidden');
     } catch (error) {
         displayError(error.message);
     }
@@ -79,7 +102,8 @@ getCurrentLocationButton.addEventListener('click', async () => {
             const { latitude, longitude } = position.coords;
             try {
                 const currentLocation = await getLocationByCoordinates(latitude, longitude);
-                locationInput.value = currentLocation;
+                locationInput.value = currentLocation; // Set the input field with the city name
+                getWeatherButton.click();
             } catch (error) {
                 displayError('Unable to retrieve your location.');
             }
@@ -91,30 +115,16 @@ getCurrentLocationButton.addEventListener('click', async () => {
 
 // Fetch Weather Data
 async function fetchWeather(location) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-
-    try {
-        const response = await fetch(
-            `${baseApiUrl}weather?q=${location}&units=metric&appid=${apiKey}`,
-            { signal: controller.signal }
-        );
-
-        clearTimeout(timeout);
-
-        if (!response.ok) {
-            throw new Error('Location not found. Please check the input.');
-        }
-
-        const data = await response.json();
-        const forecastData = await fetchForecast(data.coord.lat, data.coord.lon);
-        return { ...data, forecast: forecastData };
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please try again.');
-        }
-        throw new Error('Unable to fetch weather data. Please check your connection.');
+    const response = await fetch(
+        `${baseApiUrl}weather?q=${location}&units=metric&appid=${apiKey}`
+    );
+    if (!response.ok) {
+        throw new Error('Location not found. Please check the input.');
     }
+
+    const data = await response.json();
+    const forecastData = await fetchForecast(data.coord.lat, data.coord.lon);
+    return { ...data, forecast: forecastData };
 }
 
 // Fetch Forecast Data
@@ -166,10 +176,31 @@ function displayError(message) {
 
 // Add Search to History
 function addToHistory(location, temperature) {
+    weatherHistory = weatherHistory.filter(entry => entry.location !== location); // Avoid duplicates
     weatherHistory.unshift({ location, temperature });
+
     if (weatherHistory.length > 4) {
         weatherHistory.pop();
     }
 
     sessionStorage.setItem('weatherHistory', JSON.stringify(weatherHistory));
+    renderHistoryList();
+}
+
+// Convert Coordinates to Location (City Name)
+async function getLocationByCoordinates(lat, lon) {
+    const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    );
+    const data = await response.json();
+    if (data && data.name) {
+        return data.name; // Return city name
+    } else {
+        throw new Error('Unable to get location from coordinates.');
+    }
+}
+
+// Initial Setup: Hide History Button if No History
+if (weatherHistory.length === 0) {
+    weatherHistoryButton.classList.add('hidden');
 }

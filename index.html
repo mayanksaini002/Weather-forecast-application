@@ -5,54 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-cover bg-fixed" style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg'); font-family: 'Arial', sans-serif;">
+<body class="bg-cover bg-fixed" style="background-image: url('https://images.pexels.com/photos/186980/pexels-photo-186980.jpeg?cs=srgb&dl=pexels-tahir-shaw-50609-186980.jpg&fm=jpg'); font-family: 'Poppins', sans-serif;">
 
     <!-- Fixed Navbar -->
-    <nav class="fixed top-0 left-0 w-full opacity-80 bg-gradient-to-r from-black to-gray-800 h-[90px] shadow-md z-50 flex items-center justify-between px-6">
-        <h1 class="text-3xl text-white font-extrabold">Weather Forecast</h1>
+    <nav class="fixed top-0 left-0 w-full opacity-90 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 h-[90px] shadow-lg z-50 flex items-center justify-between px-6">
+        <h1 class="text-4xl text-white font-bold font-Roboto text-shadow-md">Weather Forecast</h1>
         <!-- Weather History Dropdown -->
         <div class="relative">
-            <button id="weatherHistoryButton" class="text-white font-semibold py-2 px-4 rounded bg-gray-700 hover:bg-gray-600">Weather History</button>
+            <button id="weatherHistoryButton" class="text-white font-semibold py-2 px-4 rounded bg-blue-600 hover:bg-blue-500 focus:outline-none">Weather History</button>
             <ul id="historyDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-black shadow-lg rounded-lg max-h-60 overflow-auto z-10">
-                <li id="noHistory" class="text-center py-2">No history available</li>
+                <li id="noHistory" class="text-center py-2 text-sm">No history available</li>
                 <ul id="historyList"></ul>
             </ul>
         </div>
     </nav>
 
     <!-- Input Container -->
-    <div class="container mx-auto mt-[135px] p-6 bg-white bg-opacity-70 shadow-lg rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
+    <div class="container mx-auto mt-[135px] p-6 bg-white bg-opacity-70 shadow-xl rounded-lg w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2">
         <div class="flex flex-col items-center justify-center gap-6">
             <!-- Location Input -->
             <div class="input-container w-full mb-0">
-                <input type="text" id="locationInput" class="p-2 w-full rounded-lg border border-blue-400 focus:ring-2 focus:ring-blue-500 text-center" placeholder="Enter city name">
+                <input type="text" id="locationInput" class="p-2 w-full rounded-lg border-2 border-indigo-500 focus:ring-2 focus:ring-indigo-400 text-center text-gray-800 font-medium shadow-md" placeholder="Enter city name">
             </div>
 
             <!-- Buttons -->
             <div class="button-container text-center w-full mt-0">
-                <p>OR</p>
-                <button id="getCurrentLocationButton" class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition mt-4">Use Current Location</button>
+                <p class="text-lg font-semibold text-gray-800">OR</p>
+                <button id="getCurrentLocationButton" class="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 mt-4">Use Current Location</button>
             </div>
 
             <div class="button-container text-center w-full mt-4">
-                <button id="getWeatherButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition">Get Weather</button>
+                <button id="getWeatherButton" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">Get Weather</button>
             </div>
         </div>
     </div>
 
     <!-- Weather Data Container -->
-    <div id="weatherContainer" class="hidden mt-12 mb-12 max-w-6xl mx-auto p-8 bg-white bg-opacity-80 rounded-lg shadow-xl">
+    <div id="weatherContainer" class="hidden mt-12 mb-12 max-w-6xl mx-auto p-8 bg-white bg-opacity-85 rounded-lg shadow-xl">
         <div class="flex flex-col lg:flex-row items-start gap-6">
             <div class="flex flex-col gap-8">
-                <h2 id="locationHeading" class="text-5xl font-bold text-black font-sans" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">Location Name</h2>
+                <h2 id="locationHeading" class="text-5xl font-bold text-black font-Roboto" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">Location Name</h2>
                 <div class="flex items-center gap-6">
-                    <div id="weatherIcon" class="text-center w-90px h-90px mt-0px"></div>
-                    <div id="weatherProperties" class="text-xl">
-                        <p id="humidity" class="font-semibold font-sans text-yellow-300">Humidity</p>
-                        <p id="windSpeed" class="font-semibold font-sans text-yellow-300">Wind Speed</p>
-                        <p id="temperature" class="font-semibold font-sans text-yellow-300">Temperature</p>
+                    <div id="weatherIcon" class="text-center w-24 h-24 mt-0"></div>
+                    <div id="weatherProperties" class="text-xl text-gray-700">
+                        <p id="humidity" class="font-semibold">Humidity</p>
+                        <p id="windSpeed" class="font-semibold">Wind Speed</p>
+                        <p id="temperature" class="font-semibold">Temperature</p>
                     </div>
                 </div>
             </div>
@@ -60,13 +61,10 @@
 
         <!-- 5-Day Forecast Section -->
         <div id="forecastContainer" class="mt-12">
-            <h3 class="text-4xl text-gray-700 font-sans font-white font-bold text-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
-                5-Day Forecast
-            </h3>
+            <h3 class="text-4xl text-gray-700 font-bold text-center font-Roboto" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">5-Day Forecast</h3>
             
-            <ul id="forecastList" class="mt-6 grid gap-8 justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+            <ul id="forecastList" class="mt-6 grid gap-8 justify-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             </ul>
-            
         </div>
     </div>
 
